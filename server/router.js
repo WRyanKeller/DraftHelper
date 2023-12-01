@@ -15,7 +15,7 @@ const router = (app) => {
   app.post('/createRoster', mid.requiresLogin, controllers.Roster.createRoster);
   app.post('/deleteRoster', mid.requiresLogin, controllers.Roster.deleteRoster);
 
-  app.get('/', mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
 module.exports = router;

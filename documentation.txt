@@ -1,0 +1,192 @@
++------------------------------------------------+
+|                                                |
+|              POKEMON DRAFT HELPER              |
+|                                                |
++------------------------------------------------+
+|                 By Ryan Keller                 |
++------------------------------------------------+
+
+~                 Documentation:                 ~
+
+--------------------------------------------------
+
+- Intended Purpose:
+    The purpose of the Pokemon Draft Helper is to
+    allow a user to keep their various rosters in
+    the same location: here. In addition to
+    editing all of your rosters, stretch goals
+    include keeping track of budget and reporting
+    certain statistics such as stat averages,
+    type weaknesses, and movepools.
+
+- Work Completed:
+    For this milestone, I've started the new
+    stylesheet (which might be my weakest area).
+    More concretely, I've completely made the
+    Roster architecture and functionality.
+    Nothing needs to be changed to add in the
+    Pokemon sprites aside from just adding in the
+    validition and sprite fetching from my first
+    project.
+
+    Other smaller completions:
+        - accounts online
+
+- Work Left:
+    Aside from adding in my validation and
+    sprites, I will also be adding the profit
+    model (see Profit Model:). Additionally,
+    I will continue refining the stylesheet
+    and get as many stretch goals done for
+    which I have time.
+
+    - Timeline:
+        Tuesday (12/5) -
+            Single Roster View completed
+        Thursday (12/7) -
+            Sprites implemented!
+            Payment Model begun
+        Sunday (12/10) -
+            Payment Model implemented
+            last day of Stretch Goal work
+        Monday (12/11) - 
+            Polishing & Bugifxing
+    
+    Other smaller goals:
+        - changing passwords
+        - 404 redirect page
+
+- React:
+    - Completed Components:
+        Roster List - 
+            displays a user's rosters
+        Roster Form - 
+            prompts for roster info
+            begins roster creation
+    - Future Components:
+        Roster Sprites - 
+            displays small sprites
+            to represent a roster in the
+            roster list
+        Mon List - 
+            displays the mons in a roster
+        Mon Form - 
+            adds a new mon to the roster
+        Move List - 
+            displays lists of mons who
+            learn important moves
+        Stat Block - 
+            displays the mons' stats
+            as well as the roster's
+            average stats
+
+- MongoDB:
+    I will be storing Accounts (name,
+    password, premium?) and their rosters
+    (name, budget, mons (single string),
+    prices(array of numbers)). Currently
+    that is all there aside from the
+    premium and prices.
+
+Profit Model:
+    I will have a separate view for a user
+    to upgrade to premium, which allows
+    for storage of more rosters (and no
+    ads if I end up adding banners).
+
+    - Plan:
+        I will add a boolean to the
+        Account schema to represent the
+        account's premium status. If 
+        the account does not have 
+        premium, an error will be thrown
+        when attempting to add have than 5
+        rosters. If the account does have
+        premium, I would be open to
+        displaying banners.
+
+- Above and Beyond:
+    While I don't expect my same api
+    interactions to get the same amount
+    of credit as last time, I will be doing
+    more advanced sorting of mons via
+    movepools and stats in order to provide
+    the user with artificial but intelligent
+    roster feedback. I would also like to use
+    Sass (time permitting).
+
+- Code Fragments
+    A lot of code is influenced or from 
+    DomoMaker. I tried to credit these
+    sections / files when they came up.
+
+
+
++------------------------------------------------+
+
+~                   Endpoints:                   ~
+
+--------------------------------------------------
+
+URL: /login
+Supported Methods: GET
+Middleware: Requires Secure, Requires Logout
+Query Params: -
+Description: returns the handlebar for the login page
+Return Type(s): HTML
+
+URL: /login
+Supported Methods: POST
+Middleware: Requires Secure, Requires Logout
+Body: name, password
+Description: compares credentials and redirects to the interor of the app if correct
+Return Type(s): JSON
+
+URL: /signup
+Supported Methods: POST
+Middleware: Requires Secure, Requires Logout
+Body: name, password, password2 (re-typing of same password)
+Description: compares passwords to eachother and checks for username availability. On a success, we go to the home page
+Return Type(s): JSON
+
+URL: /logout
+Supported Methods: GET
+Middleware: Requires Login
+Query Params: -
+Description: deletes the session account and redirects to the login
+Return Type(s): jSON
+
+URL: /home
+Supported Methods: GET
+Middleware: Requires Login
+Query Params: -
+Description: retreives the main post-login page, which is mainly a roster list
+Return Type(s): HTML
+
+URL: /getRosterList
+Supported Methods: GET
+Middleware: Requires Login
+Query Params: -
+Description: uses the current session account id to fetch all rosters belonging to this owner
+Return Type(s): JSON
+
+URL: /createRoster
+Supported Methods: POST
+Middleware: Requires Login
+Body: name, budget
+Description: creates a new roster if the name is available for this user
+Return Type(s): JSON
+
+URL: /deleteRoster
+Supported Methods: POST
+Middleware: Requires Login
+Body: roster name
+Description: attempts to delete a roster of the given name from this account's list of rosters
+Return Type(s): JSON (error), none
+
+URL: /
+Supported Methods: GET
+Middleware: Requires Secure, Requires Logout
+Query Params: -
+Description: Redirects the user to a secure login page
+Return Type(s): JSON
