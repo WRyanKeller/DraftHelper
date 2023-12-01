@@ -3,22 +3,20 @@ const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const RosterSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     trim: true,
     set: setName,
   },
-  age: {
+  budget: {
     type: Number,
-    min: 0,
-    required: true,
+    default: 0,
   },
-  slushies: {
-    type: Number,
-    min: 0,
-    required: true,
+  mons: {
+    type: String,
+    default: '',
   },
   owner: {
     type: mongoose.Schema.ObjectId,
@@ -31,10 +29,12 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+// based on code provided by Pr. Austin Willoughby and the RIT IGME Department
+RosterSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
+  mons: doc.mons,
 });
 
-const DomoModel = mongoose.model('Domo', DomoSchema);
-module.exports = DomoModel;
+const RosterModel = mongoose.model('Domo', RosterSchema);
+module.exports = RosterModel;

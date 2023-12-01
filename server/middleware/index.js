@@ -1,3 +1,5 @@
+// based on code provided by Pr. Austin Willoughby and the RIT IGME Department
+
 const requiresLogin = (req, res, next) => {
   if (!req.session.account) {
     return res.redirect('/');
@@ -7,7 +9,7 @@ const requiresLogin = (req, res, next) => {
 
 const requiresLogout = (req, res, next) => {
   if (req.session.account) {
-    return res.redirect('/maker');
+    return res.redirect('/home');
   }
   return next();
 };
