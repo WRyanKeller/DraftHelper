@@ -6,6 +6,17 @@ const { Roster } = models;
 
 const appPage = async (req, res) => res.render('app');
 
+const getNumOfRosters = async (query) => {
+  try {
+    const docs = await Roster.find(query).select('name').lean().exec();
+
+    return docs.length;
+  } catch (err) {
+    console.log(err);
+    return -1;
+  }
+};
+
 // creates a roster of a given unique name
 const createRoster = async (req, res) => {
   if (!req.body.name) {
@@ -22,11 +33,11 @@ const createRoster = async (req, res) => {
   };
 
   try {
-    const query = {owner: req.session.account._id,};
+    const query = { owner: req.session.account._id };
 
     // checks for number of rosters under id
-    let isPremium = await models.Account.checkPremium(query.owner);
-    let numRosters = await getNumOfRosters(query)
+    const isPremium = await models.Account.checkPremium(query.owner);
+    const numRosters = await getNumOfRosters(query);
 
     if (numRosters >= (isPremium ? 10 : 5)) {
       const e = new Error('manual throw to prevent overloading roster num');
@@ -76,21 +87,8 @@ const createRoster = async (req, res) => {
   }
 };
 
-const getNumOfRosters = async (query) => {
-  try {
-    const docs = await Roster.find(query).select('name').lean().exec();
-
-    return docs.length;
-  } catch (err) {
-    console.log(err);
-    return -1;
-  }
-}
-
 // retreives all rosters of the given user
 const getRosterList = async (req, res) => {
-
-  let id = req.query.id;
   try {
     const query = {
       owner: req.session.account._id,

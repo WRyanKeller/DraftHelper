@@ -9,6 +9,8 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+// authenticates login attempt
+// updates session on success
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -34,8 +36,10 @@ const login = (req, res) => {
 
 const accountPage = (req, res) => res.render('account');
 
+// authenticates user,
+// and then uses find one and update to change the password
 const passChange = async (req, res) => {
-  const username = req.session.account.username;
+  const { username } = req.session.account;
   const pass = `${req.body.pass}`;
   const newPass = `${req.body.newPass}`;
   const newPass2 = `${req.body.newPass2}`;
@@ -59,34 +63,33 @@ const passChange = async (req, res) => {
       });
     }
 
-    let doc;
     try {
       const hash = await Account.generateHash(newPass);
-      doc = await Account.findOneAndUpdate(
-        { username: username },
+      await Account.findOneAndUpdate(
+        { username },
         { $set: { password: hash } },
-        { new: true }).exec();
-        
-    } catch (err) {
+        { new: true },
+      ).exec();
+    } catch (err2) {
       // If there is an error, log it and send the user an error message.
-      console.log(err);
+      console.log(err2);
       return res.status(500).json({ error: 'Something went wrong' });
     }
 
     return res.status(204).json();
   });
-}
+};
 
+// uses the session id to upgrade the logged in user
 const upgrade = async (req, res) => {
-  const username = req.session.account.username;
+  const { username } = req.session.account;
 
-  let doc;
   try {
-    doc = await Account.findOneAndUpdate(
-      { username: username },
+    await Account.findOneAndUpdate(
+      { username },
       { $set: { premium: true } },
-      { new: true }).exec();
-      
+      { new: true },
+    ).exec();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong' });
@@ -95,6 +98,7 @@ const upgrade = async (req, res) => {
   return res.status(204).json();
 };
 
+// hashes the password and checks for duplicate names before creating a new account
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;

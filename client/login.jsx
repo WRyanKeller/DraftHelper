@@ -42,6 +42,7 @@ const handleSignup = e => {
   return false;
 };
 
+// displays the login form for returning users
 const LoginWindow = props => {
     return (
         <form id="loginForm"
@@ -61,6 +62,7 @@ const LoginWindow = props => {
     )
 };
 
+// displays the sign up form
 const SignupWindow = props => {
     return (
         <form id="signupForm"

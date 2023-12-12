@@ -1,6 +1,8 @@
 // TODO: Finish most of this
 
-const rosterAnalysis = require('./RosterAnalysis.js');
+// const rosterAnalysis = require('./RosterAnalysis.js');
+
+/*
 
 // Retrieves sprite url from the pokemon API
 // uses old code as pseudo code
@@ -13,7 +15,7 @@ const getSprite = (req, res) => {
     responseJSON.id = 'monNameNeededForArt';
     return respondJSON(request, response, 400, responseJSON);
   }
-  */
+  * /
 
   const spriteResult = rosterAnalysis.getArt(params.mon);
 
@@ -27,10 +29,17 @@ const getSprite = (req, res) => {
     responseJSON.message = 'sprite successfully retreived';
     return respondJSON(request, response, 200, responseJSON);
   });
-  */
-}
+  * /
+};
 
 // retrieves a specific roster
 const getRoster = (req, res) => {
 
+};
+
+module.exports = {
+  getSprite,
+  getRoster,
 }
+
+*/

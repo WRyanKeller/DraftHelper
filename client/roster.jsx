@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+// adds a specific pokemon to the roster
 const addMon = e => {
     e.preventDefault();
     helper.hideError();
@@ -19,6 +20,7 @@ const addMon = e => {
     return false;
 };
 
+// removes a mon form the roster
 const deleteMon = (e, name) => {
     e.preventDefault();
     helper.hideError();
@@ -28,6 +30,7 @@ const deleteMon = (e, name) => {
     return false;
 };
 
+// form for adding a pokemon to the roster
 const RosterForm = props => {
     return (
         <form id="monForm"
@@ -47,50 +50,54 @@ const RosterForm = props => {
     )
 };
 
-// 
+// displays the list of pokemon in the roster alongside
+// their sprites and prices as well as the remaining budget
 const MonList = props => {
-    if (props.rosterList.length === 0) {
+    if (props.mons.length === 0) {
         return (
             <div className='monList'>
+                <h3 id="budgetLeft">Budget Left: {props.budget}</h3>
             </div>
         );
     }
 
-    const rosters = props.rosterList.map(mon => {
+    const mons = props.mons.map(mon => {
         return (
             <div className='mon'>
                 <img className='monSprite' src></img>
-                <h3 className='rosterName'> Name: {mon.name} </h3>
-                <button className='rosterDelete' onClick={e => deleteMon(e, mon.name)}>X</button>
+                <h3 className='monName'> Name: {mon.name} </h3>
+                <h3 className='monPrice'> Price: {mon.price} </h3>
+                <button className='monDelete' onClick={e => deleteMon(e, mon.name)}>X</button>
             </div>
         );
     });
 
     return (
         <div className="monList">
-            {rosters}
+            {mons}
+            <h3 id="budgetLeft">Budget Left: {props.budget}</h3>
         </div>
     );
 };
 
 const loadMonList = async () => {
-    const response = await fetch('/getRosterList');
+    const response = await fetch('/getRoster');
     const data = await response.json();
     ReactDOM.render(
-        <MonList rosterList={data.rosterList} />,
-        document.getElementById('rosterList')
+        <MonList mons={data.mons} budget={data.budget} />,
+        document.getElementById('monList')
     );
 };
 
 const init = () => {
-    ReactDOM.render(
+    /*ReactDOM.render(
         <RosterForm />,
         document.getElementById('newRoster')
-    );
+    );*/
     
     ReactDOM.render(
         <MonList rosterList={[]} />,
-        document.getElementById('rosterList')
+        document.getElementById('monList')
     );
 
     loadMonList();

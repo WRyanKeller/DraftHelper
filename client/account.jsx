@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+// sends the three password fields and requests a change
 const handlePassChange = e => {
   e.preventDefault();
   helper.hideError();
@@ -27,6 +28,8 @@ const handlePassChange = e => {
   return false;
 };
 
+// prompts for old password for authentification
+// and then the new password twice for confirmation
 const PasswordForm = props => {
   return (
     <form id="passForm"

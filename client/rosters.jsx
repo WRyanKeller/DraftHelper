@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+// Creates a new roster with the given name and optional budget
 const createRoster = e => {
     e.preventDefault();
     helper.hideError();
@@ -19,6 +20,8 @@ const createRoster = e => {
     return false;
 };
 
+// deletes the roster by its name
+// back end deletes the roster by the given name OF THIS USER
 const deleteRoster = (e, name) => {
     e.preventDefault();
     helper.hideError();
@@ -28,6 +31,7 @@ const deleteRoster = (e, name) => {
     return false;
 };
 
+// form for creating a new roster
 const RosterForm = props => {
     return (
         <form id="rosterForm"
@@ -47,7 +51,8 @@ const RosterForm = props => {
     )
 };
 
-// 
+// displays the rosters
+// TODO: sprite preview not yet implemeted
 const RosterList = props => {
     if (props.rosterList.length === 0) {
         return (
@@ -73,6 +78,7 @@ const RosterList = props => {
     );
 };
 
+// fetches the rosters of the current user
 const loadRosterList = async () => {
     const response = await fetch('/getRosterList');
     const data = await response.json();
