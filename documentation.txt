@@ -10,6 +10,11 @@
 
 --------------------------------------------------
 
+Recourses:
+- Pokemon subject matter from Nintendo
+- account png: https://png.toolxox.com/clipart?p=m2H7K9K9i8d3d3i8_ic-account-box-48px-profile-picture-icon-square/
+- 
+
 - Intended Purpose:
     The purpose of the Pokemon Draft Helper is to
     allow a user to keep their various rosters in

@@ -22,6 +22,18 @@ const createRoster = async (req, res) => {
   };
 
   try {
+    const query = {owner: req.session.account._id,};
+
+    // checks for number of rosters under id
+    let isPremium = await models.Account.checkPremium(query.owner);
+    let numRosters = await getNumOfRosters(query)
+
+    if (numRosters >= (isPremium ? 10 : 5)) {
+      const e = new Error('manual throw to prevent overloading roster num');
+      e.code = isPremium ? 12001 : 12000;
+      throw e;
+    }
+
     // rules out roster names which have been used before
     const doc = await Roster.findOne({ name: req.body.name }).exec();
     if (doc) {
@@ -46,14 +58,39 @@ const createRoster = async (req, res) => {
       });
     }
 
+    if (err.code === 12000) {
+      return res.status(400).json({
+        error: 'Upgrade to premium to store up to ten rosters!',
+      });
+    }
+
+    if (err.code === 12001) {
+      return res.status(400).json({
+        error: 'Can only store up to ten rosters!',
+      });
+    }
+
     return res.status(500).json({
-      error: 'An error occured making domo!',
+      error: 'An error occured creating Roster!',
     });
   }
 };
 
+const getNumOfRosters = async (query) => {
+  try {
+    const docs = await Roster.find(query).select('name').lean().exec();
+
+    return docs.length;
+  } catch (err) {
+    console.log(err);
+    return -1;
+  }
+}
+
 // retreives all rosters of the given user
 const getRosterList = async (req, res) => {
+
+  let id = req.query.id;
   try {
     const query = {
       owner: req.session.account._id,

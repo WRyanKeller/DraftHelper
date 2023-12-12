@@ -32,6 +32,69 @@ const login = (req, res) => {
   });
 };
 
+const accountPage = (req, res) => res.render('account');
+
+const passChange = async (req, res) => {
+  const username = req.session.account.username;
+  const pass = `${req.body.pass}`;
+  const newPass = `${req.body.newPass}`;
+  const newPass2 = `${req.body.newPass2}`;
+
+  if (!pass || !newPass || !newPass2) {
+    return res.status(400).json({
+      error: 'All fields are required!',
+    });
+  }
+
+  if (newPass !== newPass2) {
+    return res.status(400).json({
+      error: 'New passwords do not match!',
+    });
+  }
+
+  return Account.authenticate(username, pass, async (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({
+        error: 'Wrong password!',
+      });
+    }
+
+    let doc;
+    try {
+      const hash = await Account.generateHash(newPass);
+      doc = await Account.findOneAndUpdate(
+        { username: username },
+        { $set: { password: hash } },
+        { new: true }).exec();
+        
+    } catch (err) {
+      // If there is an error, log it and send the user an error message.
+      console.log(err);
+      return res.status(500).json({ error: 'Something went wrong' });
+    }
+
+    return res.status(204).json();
+  });
+}
+
+const upgrade = async (req, res) => {
+  const username = req.session.account.username;
+
+  let doc;
+  try {
+    doc = await Account.findOneAndUpdate(
+      { username: username },
+      { $set: { premium: true } },
+      { new: true }).exec();
+      
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+
+  return res.status(204).json();
+};
+
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -53,6 +116,7 @@ const signup = async (req, res) => {
     const hash = await Account.generateHash(pass);
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
+
     req.session.account = Account.toAPI(newAccount);
     return res.json({ redirect: '/home' });
   } catch (err) {
@@ -74,4 +138,7 @@ module.exports = {
   login,
   logout,
   signup,
+  accountPage,
+  passChange,
+  upgrade,
 };

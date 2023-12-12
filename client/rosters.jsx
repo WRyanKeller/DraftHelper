@@ -35,13 +35,14 @@ const RosterForm = props => {
             onSubmit={createRoster}
             action="/createRoster"
             method="POST"
-            className="rosterForm"
+            className="addForm"
         >
-            <label htmlFor='name'>Name: </label>
-            <input id='newName' type='text' name='name' placeholder='Roster Name' />
-            <label htmlFor='budget'>Budget: </label>
-            <input id='newBudget' type='number' min='0' name='budget' />
-            <input className='makeDomoSubmit' type='submit' value='Create Roster' />
+            <h3>New Roster:</h3>
+            <label htmlFor='newName'>Name: </label>
+            <input id='newName' type='text' name='newName' placeholder='Roster Name' />
+            <label htmlFor='newBudget'>Budget: </label>
+            <input id='newBudget' type='number' min='0' name='newBudget' />
+            <input className='createRosterSubmit' type='submit' value='Create Roster' />
         </form>
     )
 };
@@ -51,17 +52,16 @@ const RosterList = props => {
     if (props.rosterList.length === 0) {
         return (
             <div className='rosterList'>
-                <h3 className='emptyList'>No Rosters Yet!</h3>
             </div>
         );
     }
 
     const rosters = props.rosterList.map(roster => {
         return (
-            <div key={roster._id} className='roster'>
+            <div key={roster._id} className='roster' onclick={e => window.location = `/roster?name=${roster.name}`}>
                 <h3 className='rosterName'> Name: {roster.name} </h3>
                 <button className='rosterDelete' onClick={e => deleteRoster(e, roster.name)}>X</button>
-                <h3 className='rosterMons'>{roster.mons}</h3>
+                <h3 className='rosterMons'></h3>
             </div>
         );
     });

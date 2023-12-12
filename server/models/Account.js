@@ -21,6 +21,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  premium: {
+    type: Boolean,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -52,6 +56,15 @@ AccountSchema.statics.authenticate = async (username, password, callback) => {
     return callback();
   } catch (err) {
     return callback(err);
+  }
+};
+
+AccountSchema.statics.checkPremium = async (_id) => {
+  try {
+    const doc = await AccountModel.findOne({ _id }).exec();
+    return !(!doc || !doc.premium);
+  } catch (err) {
+    return false;
   }
 };
 

@@ -36,5 +36,5 @@ RosterSchema.statics.toAPI = (doc) => ({
   mons: doc.mons,
 });
 
-const RosterModel = mongoose.model('Domo', RosterSchema);
+const RosterModel = mongoose.model('Roster', RosterSchema);
 module.exports = RosterModel;

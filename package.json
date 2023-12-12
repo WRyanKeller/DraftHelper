@@ -1,7 +1,7 @@
 {
-  "name": "domomaker",
+  "name": "drafthelper",
   "version": "1.0.0",
-  "description": "A Simple Login Example using Node.js, Mongo and Redis",
+  "description": "A simple tool for centralizing your draft rosters.",
   "main": "./server/app.js",
   "scripts": {
     "webpack": "webpack",
@@ -16,9 +16,9 @@
     "Node",
     "MVC",
     "Redis",
-    "Login"
+    "Pokemon"
   ],
-  "author": "Cody Van De Mark / Austin Willoughby",
+  "author": "Ryan Keller",
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/core": "^7.23.3",
